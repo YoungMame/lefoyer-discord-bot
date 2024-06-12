@@ -1,7 +1,7 @@
-require('dotenv').config(); //appelation des variables d'env
+require('dotenv').config(); 
 
 const Discord = require('discord.js');
-const config = require('./config.js');
+const config = require('./config');
 
 const bot = new Discord.Client({intents: config.discordClient});
 
@@ -24,9 +24,9 @@ bot.on('guildMemberRemove', member => {
     if (!channel) return;
     channel.send(`${member} viens de quitter le discord`);
 });
-//Auto role 
+// //Auto role 
 bot.on('guildMemberAdd', async member => {
-    const roleIds = config.roleIds;
+    const roleIds = ['1250310025751035925', '1250330038423916575']; 
     const roles = roleIds.map(roleId => member.guild.roles.cache.get(roleId));
     for (const role of roles) {
         if (role) {
@@ -34,10 +34,10 @@ bot.on('guildMemberAdd', async member => {
                 await member.roles.add(role);
                 console.log(`Rôle ${role.name} attribué à ${member.user.tag}`);
             } catch (error) {
-                console.error(`Erreur lors de l'attribution du rôle : ${error}`);
+                console.error(`Erreur lors de l'attribution du rôle ${role.name} : ${error}`);
             }
         } else {
-            console.error('Le rôle spécifié est introuvable.');
+            console.error(`Le rôle avec l'ID ${role.id} est introuvable.`);
         }
     }
 });
