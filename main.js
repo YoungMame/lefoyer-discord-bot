@@ -1,10 +1,11 @@
 require('dotenv').config(); //appelation des variables d'env
 
 const Discord = require("discord.js");
-const bot = new Discord.Client({intents: process.env.DISCORDCLIENT});
 const config = require("./config");
 
-bot.login(process.env.TOKEN);
+const bot = new Discord.Client({intents: config.discordClient});
+
+bot.login(config.token);
 bot.on("ready", async () => {
     console.log(`${bot.user.tag} est bien en ligne !`);
 });
