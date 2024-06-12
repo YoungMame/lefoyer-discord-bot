@@ -24,7 +24,7 @@ bot.on('guildMemberRemove', member => {
     if (!channel) return;
     channel.send(`${member} viens de quitter le discord`);
 });
-// //Auto role 
+//Auto role 
 bot.on('guildMemberAdd', async member => {
     const roleIds = ['1250310025751035925', '1250330038423916575']; 
     const roles = roleIds.map(roleId => member.guild.roles.cache.get(roleId));
