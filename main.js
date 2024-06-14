@@ -2,42 +2,37 @@ require('dotenv').config();
 
 const Discord = require('discord.js');
 const config = require('./config');
+const { searchLinks } = require('./Functions/searchLinks')
+const { searchSpams } = require('./Functions/searchSpams')
+const { joinMember } = require('./member') 
+const { leaveMember} = require('./member')
+const loadCommands = require("./Loaders/loadCommands")
+//const { addRoleMember} = require('./member')
+
 
 const bot = new Discord.Client({intents: config.discordClient});
+bot.commands = new Discord.Collection()
+
 
 bot.login(config.token);
+
+loadCommands(bot)
+
 bot.on('ready', async () => {
     console.log(`${bot.user.tag} est bien en ligne !`);
 });
 
-//Join
-bot.on('guildMemberAdd', member => {
-    const welcomeChannelId = '1250266955538108457'; 
-    const channel = member.guild.channels.cache.get(welcomeChannelId);
-    if (!channel) return;
-    channel.send(`${member} viens de rejoindre le discord`);
-});
 //Leave
 bot.on('guildMemberRemove', member => {
-    const leaveChannelId = '1250266955538108457'; 
-    const channel = member.guild.channels.cache.get(leaveChannelId);
-    if (!channel) return;
-    channel.send(`${member} viens de quitter le discord`);
+    leaveMember(member)
 });
-//Auto role 
+//Join 
 bot.on('guildMemberAdd', async member => {
-    const roleIds = ['1250310025751035925', '1250330038423916575']; 
-    const roles = roleIds.map(roleId => member.guild.roles.cache.get(roleId));
-    for (const role of roles) {
-        if (role) {
-            try {
-                await member.roles.add(role);
-                console.log(`Rôle ${role.name} attribué à ${member.user.tag}`);
-            } catch (error) {
-                console.error(`Erreur lors de l'attribution du rôle ${role.name} : ${error}`);
-            }
-        } else {
-            console.error(`Le rôle avec l'ID ${role.id} est introuvable.`);
-        }
-    }
+    joinMember(member)
 });
+//Links
+bot.on('messageCreate', async message => {
+    searchLinks(message)
+    searchSpams(message)
+    if(message.content === "hello") bot.commands.get("hello").run(bot, message)
+})
