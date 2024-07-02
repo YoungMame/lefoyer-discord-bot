@@ -8,6 +8,10 @@ const { joinMember } = require('./member')
 const { leaveMember } = require('./member')
 const { createEmbed } = require('./Functions/createEmbed')
 const loadCommands = require("./Loaders/loadCommands")
+const loadSlashCommands = require("./Loaders/loadSlashCommands")
+const connectDB = require("./Config/db");
+
+connectDB()
 
 const bot = new Discord.Client({intents: config.discordClient});
 bot.commands = new Discord.Collection()
@@ -15,10 +19,10 @@ bot.commands = new Discord.Collection()
 
 bot.login(config.token);
 
-loadCommands(bot)
-
 bot.on('ready', async () => {
-    console.log(`${bot.user.tag} est bien en ligne !`);
+    await loadCommands(bot)
+    await loadSlashCommands(bot)
+    console.log(`${bot.user.tag} est bien en ligne !`)
 });
 
 //Leave
@@ -34,8 +38,13 @@ bot.on('messageCreate', async message => {
     searchLinks(message)
     searchSpams(message)
     createEmbed(message)
+})
 
-    if(message.content === "hello") bot.commands.get("hello").run(bot, message)
+bot.on('interactionCreate', async interaction => {
+    if(interaction.type === Discord.InteractionType.ApplicationCommand) {
+        let command = require(`./Commands/${interaction.name}`)
+        command.run(bot, message, command.options)
+    }
 })
 
 
