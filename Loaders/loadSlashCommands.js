@@ -6,7 +6,6 @@ module.exports = async (bot) => {
     let commands = []
 
     bot.commands.forEach(command => {
-        console.log(command)
         try {
             let slashcommand = new Discord.SlashCommandBuilder()
             .setName(command.name)
@@ -18,45 +17,22 @@ module.exports = async (bot) => {
                 command.options.forEach(option => {
                     switch (option.type) {
                         case 'STRING':
-                            slashcommand.addStringOption(opt => {
-                                opt.setName(option.name)
-                                opt.setDescription(option.description)
-                                opt.setRequired(option.required)
-                            })
+                            slashcommand.addStringOption(opt => opt.setName(option.name).setDescription(option.description).setRequired(option.required))
                         break
                         case 'INTEGER':
-                            slashcommand.addIntegerOption(opt => {
-                                opt.setName(option.name)
-                                opt.setDescription(option.description)
-                                opt.setRequired(option.required)
-                            })
+                            slashcommand.addIntegerOption(opt => opt.setName(option.name).setDescription(option.description).setRequired(option.required))
+                        break
                         case 'BOOLEAN':
-                            slashcommand.addBooleanOption(opt => {
-                                opt.setName(option.name)
-                                opt.setDescription(option.description)
-                                opt.setRequired(option.required)
-                            })
+                            slashcommand.addBooleanOption(opt => opt.setName(option.name).setDescription(option.description).setRequired(option.required))
                         break
                         case 'USER':
-                            slashcommand.addUserOption(opt => {
-                                opt.setName(option.name)
-                                opt.setDescription(option.description)
-                                opt.setRequired(option.required)
-                            })
+                            slashcommand.addUserOption(opt => opt.setName(option.name).setDescription(option.description).setRequired(option.required))
                         break
                         case 'CHANNEL':
-                            slashcommand.addChannelOption(opt => {
-                                opt.setName(option.name)
-                                opt.setDescription(option.description)
-                                opt.setRequired(option.required)
-                            })
+                            slashcommand.addChannelOption(opt => opt.setName(option.name).setDescription(option.description).setRequired(option.required))
                         break
                         case 'ROLE':
-                            slashcommand.addRoleOption(opt => {
-                                opt.setName(option.name)
-                                opt.setDescription(option.description)
-                                opt.setRequired(option.required)
-                            })
+                            slashcommand.addRoleOption(opt => opt.setName(option.name).setDescription(option.description).setRequired(option.required))
                         break
                         default: throw new Error(`Le type de la commande ${command.name} invalide`)
                     }
