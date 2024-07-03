@@ -41,9 +41,10 @@ bot.on('messageCreate', async message => {
 })
 
 bot.on('interactionCreate', async interaction => {
+    console.log(interaction)
     if(interaction.type === Discord.InteractionType.ApplicationCommand) {
-        let command = require(`./Commands/${interaction.name}`)
-        command.run(bot, message, command.options)
+        let command = require(`./Commands/${interaction.commandName}`)
+        command.run(bot, interaction.channelId, command.options)
     }
 })
 

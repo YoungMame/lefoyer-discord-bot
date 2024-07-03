@@ -62,6 +62,7 @@ module.exports = async (bot) => {
                     }
                 })
             }
+            commands.push(slashcommand)
         } catch (error) {
             console.log(`Erreur lors de l'ajout de la commande ${command.name} : ${error}`)
         }       
